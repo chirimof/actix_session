@@ -6,3 +6,5 @@ authors = ["chirimof <chirimof@gmail.com>"]
 [dependencies]
 
 actix-web = "0.7"
+
+futures = "0.1"
