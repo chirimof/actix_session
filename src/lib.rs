@@ -22,23 +22,23 @@ use std::clone::Clone;
 
 
 pub struct Session<M> {
-    pub data: Rc<RefCell<M>>
+    pub session_manager: Rc<RefCell<M>>
 }
 
 impl<M> Clone for Session<M> {
     fn clone(&self) -> Self {
-        let data = Rc::clone(&self.data);
-        Session { data }
+        let session_manager = Rc::clone(&self.session_manager);
+        Session { session_manager }
     }
 }
 
 impl<M: SessionManager> Session<M> {
-    fn new(data: Rc<RefCell<M>>) -> Self {
-        Session { data }
+    fn new(session_manager: Rc<RefCell<M>>) -> Self {
+        Session { session_manager }
     }
 
     pub fn changed(&self) -> bool {
-        self.data.borrow().changed()
+        self.session_manager.borrow().changed()
     }
 }
 
@@ -136,7 +136,7 @@ impl<S> UseSession for HttpRequest<S>
     fn session<M: SessionManager> (&self) -> Option<Rc<RefCell<M>>> {
         self.extensions()
             .get::<Session<M>>()
-            .map(|session: &Session<M>| session.clone().data)
+            .map(|session: &Session<M>| session.clone().session_manager)
     }
 }
 
